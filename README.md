@@ -28,4 +28,4 @@ import database structure
 
 set database name, username, password, host
 
-set other variables 
+set other variables at the top of func.php
