@@ -19,3 +19,6 @@ add songs to shows or movies, generated link to youtube search
 
 add links to songs
 
+user sign up
+
+user subscription to shows - email daily new shows when there are songs for those episodes
