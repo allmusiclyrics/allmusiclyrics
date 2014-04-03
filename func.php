@@ -50,7 +50,7 @@ function getServer($ip){
 }
 function adflybanner(){
 	return '<script type="text/javascript"> 
-    var adfly_id = 1559170; 
+    var adfly_id = ; 
     var adfly_advert = \'banner\'; 
     var frequency_cap = 5; 
     var frequency_delay = 25; 
@@ -117,8 +117,8 @@ function getdomain($domainb)   {
 	return $url; 
 } 
 function adfly($link,$deleted=0){	
-	$key='8ab8b55639fc7ce52b53c4cb3f1305b8';
-	$uid='1559170';
+	$key='';
+	$uid='';
 	$fetchurl='http://api.adf.ly/api.php?key='.$key.'&uid='.$uid.'&advert_type=int&domain=adf.ly&url='.urlencode($link['linktext']);
 	$parse_url=parse_url($link['linktext']);
 	$hosts=hosts();
@@ -151,7 +151,7 @@ function gethref($link,$title=null,$action='linkclicked'){
 			$host='youtube';
 		}else{
 			$hosts=hosts();
-			//$link['linktext']='http://adf.ly/1559170/'.$link['linktext'];
+			//$link['linktext']='http://adf.ly//'.$link['linktext'];
 			$host=$hosts[$parse_url['host']];
 		}
 	}
@@ -294,7 +294,7 @@ function emailverification($params){
 	'If you did not sign up for a new account please ignore this email or reply to let us know.<br><br>';
 
 	$headers = 'From: Allmusiclyrics service <contact@allmusiclyrics.info>'. "\r\n" ;
-	$headers .= "Bcc: boris.plotkin@gmail.com \r\n"; 
+	$headers .= "Bcc:  \r\n"; 
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
 	return $params.mail($params['email'], $subject='Verify your new account at AllMusicLyrics.info', $body, $headers);
@@ -311,7 +311,7 @@ function emailsub($params,$eid){
 	'<br><br><br>------<br>Thank you for visiting <a href="'.mainURL().'">AllMusicLyrics.info</a>.<br>To unsubscribe from this show or all shows click <a href="'.mainURL().'/?action=unsubscribe&email='.urlencode($user[0]['username']).'">here</a> ';
 	// $body='test';
 	$headers = 'From: Allmusiclyrics service <contact@allmusiclyrics.info>'. "\r\n" . "Content-Type: text/html; charset=ISO-8859-1\r\n";
-	$headers .= "Bcc: boris.plotkin@gmail.com \r\n"; 
+	$headers .= "Bcc:  \r\n"; 
 	$subject='New episode for '.$getShow['showname'];
 	return mail($user[0]['username'], $subject, $body, $headers);
 }
@@ -329,7 +329,7 @@ function emailitem($_GET,$item){
 	$headers .= "Bcc: boris.plotkin@gmail.com \r\n"; 
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-	if(mail($to='boris.plotkin@gmail.com', $subject=$item.' added', $body, $headers))
+	if(mail($to='', $subject=$item.' added', $body, $headers))
 		return true;
 	else
 		return false;
@@ -341,10 +341,10 @@ function emailshow($_GET){
 	if(isset($_SESSION['user']['username']))$email=$_SESSION['user']['username'];
 	else $email='contact@allmusiclyrics.info';
 	$headers = 'From: Allmusiclyrics service <'.$email.'>'. "\r\n" ;
-	$headers .= "Bcc: boris.plotkin@gmail.com \r\n"; 
+	$headers .= "Bcc:  \r\n"; 
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-	if(mail($to='boris.plotkin@gmail.com', $subject='Show added', $body, $headers))
+	if(mail($to='', $subject='Show added', $body, $headers))
 		return true;
 	else
 		return false;
@@ -356,10 +356,10 @@ function emailmovie($_GET){
 	if(isset($_SESSION['user']['username']))$email=$_SESSION['user']['username'];
 	else $email='contact@allmusiclyrics.info';
 	$headers = 'From: Allmusiclyrics service <'.$email.'>'. "\r\n" ;
-	$headers .= "Bcc: boris.plotkin@gmail.com \r\n"; 
+	$headers .= "Bcc:  \r\n"; 
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-	if(mail($to='boris.plotkin@gmail.com', $subject='Movie added', $body, $headers))
+	if(mail($to='', $subject='Movie added', $body, $headers))
 		return true;
 	else
 		return false;
