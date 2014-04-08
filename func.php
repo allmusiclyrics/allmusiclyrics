@@ -271,6 +271,21 @@ function addsongform($id){
 		
 }
 
+function emailrequest($name,$eid){
+	
+	$body='Episode songs requested for show: '.$name.' <br>'.
+	'Episode: <a href="'.mainURL().'/?id='.$eid.'">'.$eid.'</a><br><br>';
+	
+	if(isset($_SESSION['user']['username']))$email=$_SESSION['user']['username'];
+	else $email=contactemail();
+	
+	$headers = 'From: '.sitename().' service <'.$email.'>'. "\r\n" ;
+	$headers .= "Bcc: ".adminemail()." \r\n"; 
+	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+	
+	if(mail($to=adminemail(), $subject='Episode songs requested for '.$name, $body, $headers))	return true;
+}
+
 function emailsong($_GET){	
 	$body='Song: '.$_GET['song'].' Desc:'.$_GET['desc'].' <br>'.
 	'Episode: <a href="'.mainURL().'/?id='.$_GET['episodeid'].'">'.$_GET['episodeid'].'</a><br><br>'.
@@ -283,11 +298,11 @@ function emailsong($_GET){
 	else $email=contactemail();
 	
 	$headers = 'From: '.sitename().' service <'.$email.'>'. "\r\n" ;
-	$headers .= "Bcc: ".adminemail." \r\n"; 
+	$headers .= "Bcc: ".adminemail()." \r\n"; 
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
 	//echo $body;
-	mail($to='boris.plotkin@gmail.com', $subject='Song added', $body, $headers);
+	mail($to=adminemail(), $subject='Song added', $body, $headers);
 
 	return 'Your song "'.$_GET['song'].'" was submitted and will be posted once approved.<br>Add another:<br>'.addsongform($_GET['episodeid']);
 }
@@ -299,7 +314,7 @@ function emailverification($params){
 	'If you did not sign up for a new account please ignore this email or reply to let us know.<br><br>';
 
 	$headers = 'From: '.sitename().' service <'.contactemail().'>'. "\r\n" ;
-	$headers .= "Bcc: ".adminemail." \r\n"; 
+	$headers .= "Bcc: ".adminemail()." \r\n"; 
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
 	return $params.mail($params['email'], $subject='Verify your new account at '.sitename(), $body, $headers);
@@ -316,7 +331,7 @@ function emailsub($params,$eid){
 	'<br><br><br>------<br>Thank you for visiting <a href="'.mainURL().'">'.sitename().'</a>.<br>To unsubscribe from this show or all shows click <a href="'.mainURL().'/?action=unsubscribe&email='.urlencode($user[0]['username']).'">here</a> ';
 	// $body='test';
 	$headers = 'From: '.sitename().' service <'.contactemail().'>'. "\r\n" . "Content-Type: text/html; charset=ISO-8859-1\r\n";
-	$headers .= "Bcc: ".adminemail." \r\n"; 
+	$headers .= "Bcc: ".adminemail()." \r\n"; 
 	$subject='New episode for '.$getShow['showname'];
 	return mail($user[0]['username'], $subject, $body, $headers);
 }

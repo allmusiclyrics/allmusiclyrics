@@ -23,8 +23,14 @@ if($_SERVER['HTTP_HOST']=='i.allmusiclyrics.info'||$_SERVER['HTTP_HOST']=='www.a
 	header("Location: $redirect");
 }
 
-//////////////////////////////////////////
+//===============================
 
+if(isset($_GET['action'])&&$_GET['action']=='requestepisode'){
+	$getShow=getShow($_GET['value']);
+	if(updateEpisode($_GET['data'],$field='request',$value=1,$idtype="episodeid")&&emailrequest($getShow['showname'],$_GET['data']))
+		echo '<b>Request has been sent.</b> ';
+	exit;
+}
 if(isset($_GET['action'])&&$_GET['action']=='savetotals'){
 	$getEpisodes=getEpisodes4("where `episodeid`=".$_GET['itemid']);
 	if($output=updateEpisode($getEpisodes[0]['showid'],'total',0,"showid"))
@@ -509,7 +515,7 @@ if(isset($_GET['id'])&&$_GET['id']){
 	echo '<br><br>Started in <a href="http://blog.allmusiclyrics.info/2008/11/all-music-lyrics.html">2008</a>, we strive to provide all the song names and links to playing those songs or downloading the music specially intro and end credit title songs in popular TV shows and movies.<br>'
 		.'<br><a href="?p=signup">Sign up</a> to subscribe to your favorite shows and receive emails when it is posted with songs. Many thanks to those that are active and addings songs, <a href="?p=signup">sign up</a> to make money from adding popular song lists.<br>'
 		.'<br>Check out the old <a href="http://blog.allmusiclyrics.info" target="_blank">lyrics blog</a> for various older shows and movies as well as popular song lyrics not available on other lyrics websites.<br><br>'.
-		'<a href-"https://github.com/allmusiclyrics/allmusiclyrics" target="_blank">Source code</a> is open and on <a href="github.com" target="_blank">github.com</a><br><br>'.
+		'<a href="https://github.com/allmusiclyrics/allmusiclyrics" target="_blank">Source code</a> is open and on <a href="https://github.com/allmusiclyrics/allmusiclyrics" target="_blank">github.com</a><br><br>'.
 		'See the <a href="?p=popularshows">popular shows</a> and <a href="?p=popularlinks">popular links</a>';
 	
 }elseif(isset($_GET['showid'])&&$_GET['showid']){

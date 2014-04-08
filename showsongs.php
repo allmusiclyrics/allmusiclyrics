@@ -8,8 +8,11 @@ if($getSongs=getSongs($getEpisode['episodeid'])){foreach($getSongs as $song){
 	include('songs.php');
 }}
 
-if($getSongs==null)echo "Coming soon... please add the songs below.";
-
+if($getSongs==null){
+	echo "Coming soon... please add the songs below.<br>";
+	if($getEpisode['request']==0)echo '<font id=editrequestepisode><input type=button onclick="handleClick(\'requestepisode\',\''.$getEpisode['episodeid'].'\',\''.$getEpisode['showid'].'\')" value="Request it!"/></font>';
+	//else echo 'Requested';
+}
 echo '<br><br>';
 if(isset($_SESSION['user']['department'])&&$_SESSION['user']['department']=='admins'){
 	echo 'Views: '.$getEpisode['views'];

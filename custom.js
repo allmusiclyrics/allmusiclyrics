@@ -27,6 +27,9 @@ function changview(view,field){
 	document.getElementById(view).style.display='block';
 	document.getElementById(field).focus();
 }
+function handleClick(view,data,value){
+	$("#edit"+view).load("index.php?action="+view+"&data="+data+"&value="+value);
+}
 function updateshow(showid){
 	var thetvdb = encodeURIComponent(document.getElementById("thetvdb").value);
 	var lastseason = encodeURIComponent(document.getElementById("lastseason").value);
