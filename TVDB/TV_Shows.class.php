@@ -18,7 +18,7 @@
 		 **/
 		public static function search($showName) {
 			$params = array('action' => 'search_tv_shows', 'show_name' => $showName);
-			$data = self::request($params);
+			return $data = self::request($params);
 			
 			if($data) {
 				$xml = simplexml_load_string($data);
@@ -37,7 +37,7 @@
 		 * @return TV_Show|false A TV_Show object or false if not found
 		 **/
 		public static function findById($showId) {
-			$params = array('action' => 'show_by_id', 'id' => $showId);
+			$params = array('action' => 'show_by_id', 'show_id' => $showId);
 			$data = self::request($params);
 			
 			if ($data) {
@@ -49,7 +49,7 @@
                     return false;
                 }
 			} else {
-				return false;
+				return 'no data';
 			}
 		}
 	}

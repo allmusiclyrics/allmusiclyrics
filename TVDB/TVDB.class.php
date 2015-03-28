@@ -12,7 +12,7 @@
      */
     define('PHPTVDB_URL', 'http://thetvdb.com/');
     define('PHPTVDB_API_URL', PHPTVDB_URL.'api/');
-
+	
 	class TVDB {
 
 		/**
@@ -76,8 +76,8 @@
 			switch($params['action']) {
 
 				case 'show_by_id':
-					$id = $params['id'];
-					$url = self::baseUrl.'data/series/'.$id.'/';
+					$showId = $params['show_id'];
+					$url = self::apiUrl.self::apiKey.'/series/'.$showId.'/';
 
 					$data = self::fetchData($url);
 					return $data;
@@ -103,8 +103,9 @@
 
                 case 'get_all_episodes':
                     $showId = $params['show_id'];
-                    $url = self::baseUrl.'/data/series/'.$showId.'/all/';
-
+                    // $url = self::baseUrl.'/data/series/'.$showId.'/all/';
+					$url = self::apiUrl.self::apiKey.'/series/'.$showId.'/all/';
+					
                     $data = self::fetchData($url);
                     return $data;
                 break;
