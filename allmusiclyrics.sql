@@ -1,3 +1,24 @@
+-- phpMyAdmin SQL Dump
+-- version 3.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Mar 30, 2015 at 01:01 AM
+-- Server version: 5.1.66-0+squeeze1
+-- PHP Version: 5.3.29
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `aml`
+--
 
 -- --------------------------------------------------------
 
@@ -48,8 +69,10 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `birthday` varchar(100) NOT NULL,
   `verify` text NOT NULL,
   `verfied` int(11) NOT NULL,
+  `songsadded` int(11) NOT NULL,
+  `lastactive` int(11) NOT NULL,
   PRIMARY KEY (`eid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=166 ;
 
 -- --------------------------------------------------------
 
@@ -71,8 +94,9 @@ CREATE TABLE IF NOT EXISTS `episodes` (
   `tunefind` int(11) NOT NULL,
   `total` int(11) NOT NULL,
   `magnet` varchar(255) NOT NULL,
+  `request` int(11) NOT NULL,
   PRIMARY KEY (`episodeid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21001 ;
 
 -- --------------------------------------------------------
 
@@ -90,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   `real` text NOT NULL,
   `clickcount` int(11) NOT NULL,
   PRIMARY KEY (`linkid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28524 ;
 
 -- --------------------------------------------------------
 
@@ -109,8 +133,9 @@ CREATE TABLE IF NOT EXISTS `shows` (
   `lastseason` int(11) NOT NULL,
   `airday` int(11) NOT NULL,
   `updated` varchar(100) NOT NULL,
+  `lastupdated` int(11) NOT NULL,
   PRIMARY KEY (`showid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=309 ;
 
 -- --------------------------------------------------------
 
@@ -129,8 +154,9 @@ CREATE TABLE IF NOT EXISTS `songs` (
   `theme` int(11) NOT NULL,
   `clickcount` int(11) NOT NULL,
   `eid` int(11) NOT NULL,
+  `ord` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`songid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53715 ;
 
 -- --------------------------------------------------------
 
@@ -145,4 +171,8 @@ CREATE TABLE IF NOT EXISTS `subs` (
   `eid` int(11) NOT NULL,
   `del` int(11) NOT NULL,
   PRIMARY KEY (`subid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=86 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
