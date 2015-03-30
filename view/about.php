@@ -6,7 +6,7 @@ Started in <a href="http://blog.allmusiclyrics.info/2008/11/all-music-lyrics.htm
 
 Check out the old <a href="http://blog.allmusiclyrics.info" target="_blank">lyrics blog</a> for various older shows and movies as well as popular song lyrics not available on other lyrics websites.<br><br>
 
-The code is open source for anyone to view/edit/modify, if you would like to contribute you can find the latest on <a href="https://bitbucket.org/allmusic/aml" target="_blank">bitbucket.org</a> (older version on <a href="https://github.com/allmusiclyrics/allmusiclyrics" target="_blank">github</a>).<br><br>
+The code is open source for anyone to view/edit/modify, if you would like to contribute you can find the latest code on <a href="https://github.com/allmusiclyrics/allmusiclyrics" target="_blank">github</a>.<br><br>
 
 Also see the <a href="?p=popularshows">popular shows</a> and <a href="?p=popularlinks">popular links</a><br><br>
 
