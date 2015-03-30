@@ -19,7 +19,7 @@ if (isset($_COOKIE['expire'])){
 	}
 }
 $show = select_table('shows',null,'1 order by lastupdated desc limit 1');
-if($show[0]['lastupdated']<=strtotime('-60 minutes')){
+if($show[0]['lastupdated']<=strtotime('-30 minutes')){
 	require ROOTPATH.'/controller/TVDB.php';
 	hourlyupdate($show);
 }
