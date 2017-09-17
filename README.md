@@ -1,7 +1,7 @@
-### Song Music (allmusiclyrics) project ###
+### Show Music (allmusiclyrics) project ###
 This is a TV show and movie database for song lists and soundtracks, with associated links for more information on the songs.
 
-songmusic.ml website uses the following:
+showmusic.ml website uses the following:
 ==============
 - http://lessframework.com design
 - http://thetvdb.com api
