@@ -1,7 +1,7 @@
-### All Music Lyrics project ###
+### Song Music (allmusiclyrics) project ###
 This is a TV show and movie database for song lists and soundtracks, with associated links for more information on the songs.
 
-allmusiclyrics.info website uses the following:
+songmusic.ml website uses the following:
 ==============
 - http://lessframework.com design
 - http://thetvdb.com api
