@@ -1,10 +1,11 @@
 <?php
 
 
-function select_table($table,$fields=null,$where=null,$display=null,$countonly=null){
-	if($countonly!=null)$select = 'count(*)';
+function select_table($table,$fields=null,$where=null,$display=null,$countonly=null,$sum=null){
+	if($countonly)$select = 'count(*)';
+	elseif($sum)$select = 'sum('.$sum.')';
 	else $select = '*';
-	db_connect();
+	$link = db_connect();
 	$query = "select $select from `$table` where ";
 	if($fields){foreach($fields as $field=>$value){
 		$count++;
@@ -12,14 +13,15 @@ function select_table($table,$fields=null,$where=null,$display=null,$countonly=n
 		if(count($fields)!=$count)$query .= " and ";
 	}}elseif(!$where) $query .= "1 ";
 	$query .= $where;
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	if($display) return array('results'=>$results,'query'=>$query);
 	elseif($countonly) return $results[0][0];
+	elseif($sum) return $results[0]['sum('.$sum.')'];
 	else return $results;
 }
 function updateTable($table,$fields,$where,$display=null){
-	db_connect();
+	$link = db_connect();
 	$query = "update $table set ";
 	foreach($fields as $field=>$value){
 		$count++;
@@ -27,21 +29,21 @@ function updateTable($table,$fields,$where,$display=null){
 		if(count($fields)!=$count)$query .= " , ";
 	}
 	$query .= $where;
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	if($display==1) return array('results'=>$result,'query'=>$query);
 	else return $result;
 }
 
 
 function insert_table($table,$fields,$display=0){
-	db_connect();
+	$link = db_connect();
 	$query = "insert into `$table` set ";
 	foreach($fields as $field=>$value){
 		$count++;
 		$query .= " `$field`='$value' ";
 		if(count($fields)!=$count)	$query .= " , ";
 	}
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	if($display==1)return mysql_insert_id();
 	else return $result;	
 }
@@ -77,7 +79,7 @@ function makeLinkAID($aid='',$addviewas='',$newwindow=''){
 	if($aid!=0&&$aid!=1)return makeLink($value='AppID# '.$aid,$href='?aid='.$aid.$addviewas,$onclick='',$onmouseover='',$span='',$title='',$style='',$id='');
 }
 function makeLink($value='',$href='#',$onclick='',$onmouseover='',$span='',$title='',$style='',$id=''){
-	$output .= '';
+	$output = '';
 	if($span!='')$output .= '<span id="'.$span.'">';
 	$output .= '<a href="'.$href.'" target="_blank" title="'.$title.'" onclick="'.$onclick.'" onmouseover="'.$onmouseover.'" style="'.$style.'" id="'.$id.'">'.$value.'</a>';
 	if($span!='')$output .= '</span>';

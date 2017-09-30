@@ -28,6 +28,7 @@ if($getLinks=getLinks($song['songid'])){foreach($getLinks as $link){
 		$link['real']="https://www.youtube.com/results?q=".urlencode($song['songtext']);
 		$link['title']='youtube';
 		$link['linktext']="http://adf.ly/".adflyuid()."/".$link['real'];
+		//$link['linktext']="http://sh.st/st/".shortestid()."/".$link['real'];
 		$link['linkid']=$song['songid'];
 		$link['clickcount']=$song['clickcount'];
 		echo ' - '.gethref($link,null,'songclicked');
@@ -43,6 +44,7 @@ if($getLinks=getLinks($song['songid'])){foreach($getLinks as $link){
 	$link['real']="https://www.youtube.com/results?q=".urlencode($song['songtext']);
 	$link['title']='youtube';
 	$link['linktext']="http://adf.ly/".adflyuid()."/".$link['real'];
+	//$link['linktext']="http://sh.st/st/".shortestid()."/".$link['real'];
 	$link['linkid']=$song['songid'];
 	$link['clickcount']=$song['clickcount'];
 	echo gethref($link,null,'songclicked');

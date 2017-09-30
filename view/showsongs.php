@@ -9,13 +9,21 @@ if($getSongs=getSongs($getEpisode['episodeid'])){foreach($getSongs as $song){
 }}
 
 if($getSongs==null){
+	if(!$nametunefind){
+		$nametunefind=str_replace (' ','-', $getShow['showname']);
+		$nametunefind=str_replace ("'",'', $nametunefind);
+	}
 	$onclick = 'onclick="changview(\'addsong\',\'song\')"';
-	echo "Please <a href='javascript:void(0)' $onclick>add the songs in this episode</a> below:<br>";
+	echo "<br>We don't have the songs yet, please <a href='javascript:void(0)' $onclick>add the songs in this episode</a> - get the songs from ";
+	echo '<a href="http://www.tunefind.com/show/'.$nametunefind.'/season-'.$getEpisode['season'].$tunefindadd.'" target="_blank" >TuneFind</a>. <br>';
+	echo '(or check our guide ';
+	echo makelink('How to find out which songs are playing?','?p=how-to-find-music-in-shows');
+	echo ")<br><br>Thank you for your help!<br>";
 	// if($getEpisode['request']==0)
-		echo '<font id=editrequestepisode>or <input type=button onclick="handleClick(\'requestepisode\',\''.$getEpisode['episodeid'].'\',\''.$getEpisode['showid'].'\');focuson(\'email'.$getEpisode['episodeid'].'\')" value="Request it!"/></font>';
+		//echo '<font id=editrequestepisode>or <input type=button onclick="handleClick(\'requestepisode\',\''.$getEpisode['episodeid'].'\',\''.$getEpisode['showid'].'\');focuson(\'email'.$getEpisode['episodeid'].'\')" value="Request it!"/></font>';
 	//else echo 'Requested';
 }
-echo '<br><br>';
+//echo '<br>';
 if(isset($_SESSION['user']['department'])&&$_SESSION['user']['department']=='admins'){
 	echo 'Views: '.$getEpisode['views'];
 	if($next){		
@@ -41,8 +49,9 @@ if(!isset($_SESSION['user']['department'])||$_SESSION['user']['department']!='ad
 	updateEpisode($id=$_GET['id'],$field='views',$value);
 }
 
-echo '<span id="addsong" style="display:none">'. addsongform($_GET['id']).'</span>'.
-'<br><span id="buttonaddsong"><input type=button onclick="changview(\'addsong\',\'song\')" value="Add song"></span>';
+
+echo '<span id="addsong" style="display:none">'. addsongform($_GET['id']).'</span>';
+echo '<br><span id="buttonaddsong"><input type=button onclick="changview(\'addsong\',\'song\')" value="Add song"></span>';
 
 //if($_SESSION['user']['department']=='admins')echo '</form>';
 //if($_SESSION['user']['department']=='admins')echo '</span>';

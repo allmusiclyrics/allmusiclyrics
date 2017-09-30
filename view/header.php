@@ -13,30 +13,10 @@
 		<![endif]-->
 		<link rel="stylesheet" media="all" href=""/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<?php 
 
-		<!--
-		<script type="text/javascript">var p="http",d="static";if(document.location.protocol=="https:"){p+="s";d="engine";}var z=document.createElement("script");z.type="text/javascript";z.async=true;z.src=p+"://"+d+".adzerk.net/ados.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(z,s);</script>
-		
-<script type="text/javascript">
-var ados = ados || {};
-ados.run = ados.run || [];
-ados.run.push(function() {
-/* load placement for account: bplotkin, site: Allmusiclyrics, size: 125x125 - Square Button*/
-ados_add_placement(5397, 27934, "azk91906", 16);
-ados_load();
-});</script>
--->
 
-<?php if(!isset($_SESSION['user'])){ ?>
-<script type="text/javascript"> 
-    var adfly_id = 1559170; 
-    var adfly_advert = 'banner'; 
-    var frequency_cap = 5; 
-    var frequency_delay = 15; 
-    var init_delay = 0; 
-</script> 
-<script src="http://cdn.adf.ly/js/entry.js"></script>
-<?php } ?>
+?>
 
 <!-- Adding "maximum-scale=1" fixes the Mobile Safari auto-zoom bug: http://filamentgroup.com/examples/iosScaleBug/ -->
  <link rel="stylesheet" type="text/css" href="css/style.css?v=<?php echo filemtime('css/style.css'); ?>">

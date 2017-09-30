@@ -10,7 +10,7 @@ if(!$seasonstart)$seasonstart=1;
 if(!$total)$total=1;
 // =========== TVDB API
 // require_once('TVDB.php');
-define('PHPTVDB_API_KEY', 'EA6559FC1B0C7AEA');
+if(!PHPTVDB_API_KEY)define('PHPTVDB_API_KEY', 'EA6559FC1B0C7AEA');
 require ROOTPATH.'/TVDB/TVDB.class.php';
 require ROOTPATH.'/TVDB/TV_Show.class.php';
 require ROOTPATH.'/TVDB/TV_Shows.class.php';

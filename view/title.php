@@ -1,9 +1,8 @@
 <?php
 
-$sitename = "All Music Lyrics";
+$sitename = "Show Music";
 $title = '';
 $home = '';
-$search = array(' ','(',')','@','!',"'",',','?','*','&');
 
 if(isset($_GET['id'])&&is_numeric($_GET['id'])){
 	if($getEpisode=getEpisode($_GET['id'])){
@@ -19,7 +18,7 @@ if(isset($_GET['id'])&&is_numeric($_GET['id'])){
 					header('Location: /?id='.$_GET['id'].'&'.$addtitle);
 				}
 			}
-			$title .= $getShow['showname'].' '.$seasonepisode.' songs list sound track '.$getEpisode['title'];
+			$title .= $getShow['showname'].' '.$seasonepisode.' '.$getEpisode['title'].' | songs list soundtrack ';
 		}else{
 			$addtitle =  str_replace ($search,'-',$getEpisode['title'].' song list soundtrack');
 			$addtitle = urlencode($addtitle);
@@ -34,6 +33,8 @@ if(isset($_GET['id'])&&is_numeric($_GET['id'])){
 		
 	}else{
 		$title .= 'Not found';
+		
+		header("HTTP/1.0 404 Not Found");
 	}
 	
 }elseif(isset($_GET['q'])&&$_GET['q']){
@@ -47,16 +48,14 @@ if(isset($_GET['id'])&&is_numeric($_GET['id'])){
 	else $home=1;
 	
 	
-}else
-	$home=1;
+}else $home=1;
 
 if($home){
-	$getLastPosts=getLastPosts();
-	$title = ' New song lists and soundtracks TV shows and movies ';
+	if(!isset($getLastPosts))$getLastPosts=getLastPosts();
+	$title = 'Song lists soundtracks TV and movies ';
 }
 
-if(isset($_GET['p'])&&$_GET['p'])
-	$title = $_GET['p'];
+if(isset($_GET['p'])&&$_GET['p'])$title = $_GET['p'];
 	
 $title.=' - '.$sitename;
 

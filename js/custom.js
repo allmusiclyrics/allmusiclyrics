@@ -87,14 +87,14 @@ function contactus(){
 function addsong(){
 	var song = encodeURIComponent(document.getElementById("song").value);
 	var desc = encodeURIComponent(document.getElementById("desc").value);
-	var link = encodeURIComponent(document.getElementById("link").value);
+	//var link = encodeURIComponent(document.getElementById("link").value);
 	//var artist = encodeURIComponent(document.getElementById("artist").value);
 	var episodeid = document.getElementById("id").value;
 	if(song==''){
 		alert('Must add song name and artist');
 		document.getElementById("song").focus();
 	}else{
-		$("#addsong").load("index.php?action=addsong&song="+song+"&desc="+desc+"&episodeid="+episodeid+"&linktext="+link); //"&artist="+artist+
+		$("#addsong").load("index.php?action=addsong&song="+song+"&desc="+desc+"&episodeid="+episodeid); //"&artist="+artist+"&linktext="+link
 	}
 }
 function delitem(id){

@@ -19,7 +19,7 @@
 	I always loved you and wanted the best for you, I also want to do better because of my past actions.<br>
 	I know what you feel about the past but trust me that I learned from my mistakes.<br>
 	I know how you feel about the future but trust me I learned from the past.<br>
-	<img src="IMG_6097.jpg">
+	<img src="view/IMG_6097.jpg">
 	
 	<hr>
 	

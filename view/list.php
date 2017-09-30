@@ -1,4 +1,6 @@
 <?php
+
+
 if($getEpisode['season']!=0){
 	$seasonepisode="S".sprintf("%02d",$getEpisode['season'])."E".sprintf("%02d",$getEpisode['episode']);
 	$short='S'.sprintf("%02d",$getEpisode['season'])."E".sprintf("%02d",$getEpisode['episode']);
@@ -30,25 +32,21 @@ if($getEpisode['season']!=0){
 	if($countSongs==1)$songsout='song';
 	else $songsout='songs';
 	
-	echo $getEpisode['title'].'</a>'.
-	' &nbsp; '.$countSongs.' '.$songsout;
-	//if(isset($_SESSION['user'])&&$_SESSION['user']['department']=='admins'){
-		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
-			' views: '.$getEpisode['views'];
-	//}
+	echo $getEpisode['title'].'</a>&nbsp; '.$countSongs.' '.$songsout;
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; views: '.$getEpisode['views'];
 	echo  '<br>'; 
-	//('.$seasonepisode.')4
+	
 }else{
 	$addtitle =  str_replace ($search,'-',$getEpisode['title'].' song list soundtrack');
 	$showurl='?id='.$getEpisode['episodeid'].'&'.urlencode($addtitle);
 	echo '<a href="'.$showurl.'" title="'.$getEpisode['title'].' song list soundtrack">';
+	
 	$countSongs=countSongs($getEpisode['episodeid']);
 	
 	if($countSongs==1)$songsout='song';
 	else $songsout='songs';
 	
-	echo $getEpisode['title'].'</a>'.
-	' &nbsp; '.$countSongs.' '.$songsout;
+	echo $getEpisode['title'].'</a> &nbsp; '.$countSongs.' '.$songsout;
 	if($_SESSION['user']['department']=='admins'){
 		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views: '.$getEpisode['views'].
 		'<input type=button onclick="window.open(\'?deleteepisode='.$getEpisode['episodeid'].'&showid='.$getEpisode['showid'].'\',\'_self\')" value="delete">';

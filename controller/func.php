@@ -300,98 +300,98 @@ function gethref($link,$title=null,$action='linkclicked'){
 	
 	return $out;
 }
-function addsongs($_POST){
-	$_POST['songs']=str_replace("\r\n \r\n", "\r\n",$_POST['songs']);
-	$_POST['songs']=preg_replace("/^\r\n/", "",$_POST['songs']);
-	$songs = explode("\n", $_POST['songs']);$count=null;$return=null;
+function addsongs($params){
+	$params['songs']=str_replace("\r\n \r\n", "\r\n",$params['songs']);
+	$params['songs']=preg_replace("/^\r\n/", "",$params['songs']);
+	$songs = explode("\n", $params['songs']);$count=null;$return=null;
 	if($songs){foreach ($songs as $song){
 		$count++;
 		$return.= $count.' '.$song;
 		if($count%2){
-			$songid=saveSong($song,$_POST['id']);
+			$songid=saveSong($song,$params['id']);
 		}else{
 			if($song!='add scene description')updateSong($songid,'desc',$song);
 		}
 		
 	}}
-	$return.=$_POST['id'].' <br><br>';
+	$return.=$params['id'].' <br><br>';
 	return $return;
 }
 function updateSong($songid,$field,$data){
-	db_connect();
+	$link = db_connect();
 	$query = sprintf("update `songs` set `$field`='%s' where `songid`='%s'",
-	mysql_real_escape_string($data),
-	mysql_real_escape_string($songid)
+	mysqli_real_escape_string($link,$data),
+	mysqli_real_escape_string($link,$songid)
 	);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 function updateLink($linkid,$field,$data,$by='linkid'){
-	db_connect();
+	$link = db_connect();
 	$query = sprintf("update `links` set `$field`='%s' where `$by`='%s'",
-	mysql_real_escape_string($data),
-	mysql_real_escape_string($linkid)
+	mysqli_real_escape_string($link,$data),
+	mysqli_real_escape_string($link,$linkid)
 	);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 function saveLink($link,$id,$title='',$real,$deleted=0){
 	if($title)$add=", `title`='".$title."'";
 	if($deleted)$add=", `deleted`='1'";
 	$date=time();
-	db_connect();
+	$link = db_connect();
 	$query = sprintf("insert into `links` set `linktext`='%s', `songid`='%s', `real`='$real', `dateadded`='$date' $add",
-	mysql_real_escape_string($link),
-	mysql_real_escape_string($id)
+	mysqli_real_escape_string($link,$link),
+	mysqli_real_escape_string($link,$id)
 	);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return mysql_insert_id();
 }
 function saveSong($song,$id,$deleted=0,$desc=0){
+	$link = db_connect();
 	if($_SESSION['user']['eid'])$eid=$_SESSION['user']['eid'];
 	else $eid=0;
 	$date = time();
 	$add=null;
 	if($deleted)$add=", `deleted`=1";
-	if($desc)$add.=", `desc`='".mysql_real_escape_string($desc)."'";
-	db_connect();
+	if($desc)$add.=", `desc`='".mysqli_real_escape_string($link,$desc)."'";
+	
 	$query = sprintf("insert into `songs` set `songtext`='%s', `episodeid`='%s', `dateadded`='$date', `eid`='$eid' $add",
-	mysql_real_escape_string($song),
-	mysql_real_escape_string($id)
+	mysqli_real_escape_string($link,$song),
+	mysqli_real_escape_string($link,$id)
 	);
-	$result = mysql_query($query);
-	return mysql_insert_id();
+	$result = mysqli_query($link,$query);
+	return mysqli_insert_id($link);
 }
 function saveMovie($values){
-	db_connect();
-	$query = "insert into episodes set `title`='".mysql_real_escape_string($values['moviename'])."'";
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = "insert into episodes set `title`='".mysqli_real_escape_string($link,$values['moviename'])."'";
+	$result = mysqli_query($link,$query);
 	return mysql_insert_id();
 }
-function saveEpisode($_POST,$getShow=null){
-	db_connect();
+function saveEpisode($params,$getShow=null){
+	$link = db_connect();
 	$query = sprintf("insert into episodes set `title`='%s', `episode`='%s', `season`='%s', `date`='%s', `timestamp`='%s', `showid`='%s', `total`='%s'",
-	mysql_real_escape_string($_POST['title']),
-	mysql_real_escape_string($_POST['episode']),
-	mysql_real_escape_string($_POST['season']),
-	mysql_real_escape_string($_POST['date']),
-	mysql_real_escape_string(strtotime($_POST['date'])),
-	mysql_real_escape_string($_POST['showid']),
-	mysql_real_escape_string($_POST['total'])
+	mysqli_real_escape_string($link,$params['title']),
+	mysqli_real_escape_string($link,$params['episode']),
+	mysqli_real_escape_string($link,$params['season']),
+	mysqli_real_escape_string($link,$params['date']),
+	mysqli_real_escape_string($link,strtotime($params['date'])),
+	mysqli_real_escape_string($link,$params['showid']),
+	mysqli_real_escape_string($link,$params['total'])
 	);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 function addsongform($id){
-	$output = makelink('How to find out which songs are playing?','http://blog.allmusiclyrics.info/2015/03/how-to-find-out-music-and-songs-in-tv.html').
-		'<br>'.
-		'<input type=text placeholder="Song name and artist" style="width:320px"  id="song" onkeypress="if (event.keyCode == 13) addsong()" >*'.
-		'<br>'.
-		'<input type=text placeholder="Describe scene" style="width:320px" id="desc" onkeypress="if (event.keyCode == 13) addsong()">'.
-		'<br>'.
-		'<input type=text placeholder="Link (optional, example: http://www.youtube.com/watch?v=YdPml5QhMIA ) optional" style="width:320px" id="link" onkeypress="if (event.keyCode == 13) addsong()">'.
-		'<input type="hidden" name="id" id="id" value="'.$id.'">'.
-		'<input type=button onclick="addsong()" value="Add Song">';
+	$output = '<br>';
+	$output .= '<input type=text placeholder="Song name and artist" style="width:320px"  id="song" onkeypress="if (event.keyCode == 13) addsong()" >*';
+	$output .= '<br>';
+	$output .= '<input type=text placeholder="Describe scene (optional)" style="width:320px" id="desc" onkeypress="if (event.keyCode == 13) addsong()">';
+	$output .= '<br>';
+	//$output .= '<input type=text placeholder="Link (optional, example: http://www.youtube.com/watch?v=YdPml5QhMIA ) optional" style="width:320px" id="link" onkeypress="if (event.keyCode == 13) addsong()">'.
+	$output .= '<input type="hidden" name="id" id="id" value="'.$id.'">';
+	$output .= '<input type=button onclick="addsong()" value="Add Song">';
 	return $output;
 }
 
@@ -418,15 +418,15 @@ function emailrequest($name,$eid){
 	if(mail($to=adminemail(), $subject='Episode songs requested for '.$name, $body, $headers))	return true;
 }
 
-function emailsong($_GET){
+function emailsong($params){
 	$ip = getIP();
-	$body='Song: '.$_GET['song'].' Desc:'.$_GET['desc'].' <br>'.
-	'Episode: <a href="'.mainURL().'/?id='.$_GET['episodeid'].'">'.$_GET['episodeid'].'</a><br><br>'.
-	'Link: <a href="'.$_GET['linktext'].'">link</a><br><br>'.
+	$body='Song: '.$params['song'].' Desc:'.$params['desc'].' <br>'.
+	'Episode: <a href="'.mainURL().'/?id='.$params['episodeid'].'">'.$params['episodeid'].'</a><br><br>'.
+	'Link: <a href="'.$params['linktext'].'">link</a><br><br>'.
 	'IP: <a href="http://www.ip2location.com/'.$ip.'">'.$ip.'</a><br>'.
-	//'<a href="'.mainURL().'/?action=approvesongonly&songid='.$_GET['songid'].'&id='.$_GET['episodeid'].'">Approve song only</a><br><br>'.
-	//'<a href="'.mainURL().'/?action=approvesong&songid='.$_GET['songid'].'&id='.$_GET['episodeid'].'">Approve song with link</a><br><br>'.
-	'<a href="'.mainURL().'/?action=deletesong&itemid='.$_GET['songid'].'&id='.$_GET['episodeid'].'">DELETE</a><br><br>';
+	//'<a href="'.mainURL().'/?action=approvesongonly&songid='.$params['songid'].'&id='.$params['episodeid'].'">Approve song only</a><br><br>'.
+	//'<a href="'.mainURL().'/?action=approvesong&songid='.$params['songid'].'&id='.$params['episodeid'].'">Approve song with link</a><br><br>'.
+	'<a href="'.mainURL().'/?action=deletesong&itemid='.$params['songid'].'&id='.$params['episodeid'].'">DELETE</a><br><br>';
 	
 	if(isset($_SESSION['user']['username']))$email=$_SESSION['user']['username'];
 	else $email=contactemail();
@@ -438,7 +438,7 @@ function emailsong($_GET){
 	//echo $body;
 	mail($to=adminemail(), $subject='Song added', $body, $headers);
 
-	return 'Your song "'.$_GET['song'].'" was submitted and will be posted once approved.<br>Add another:<br>'.addsongform($_GET['episodeid']);
+	return '<br>Your song "'.$params['song'].'" was submitted Thank you.<br>Add another:<br>'.addsongform($params['episodeid']); //and will be posted once approved.
 }
 
 function createaccount($params){
@@ -501,15 +501,15 @@ function emailsub($params,$eid){
 	$subject='New episode for '.$getShow['showname'];
 	return mail($user[0]['username'], $subject, $body, $headers);
 }
-function emailitem($_GET,$item){
+function emailitem($params,$item){
 	$ip = getIP();
-	$getsong = getSong($_GET['itemid']);
-	$body='Add '.$item.': '.$_GET['data'].' <br>'.
+	$getsong = getSong($params['itemid']);
+	$body='Add '.$item.': '.$params['data'].' <br>'.
 	'Song: '.$getsong[0]['songtext'].'<br>'.
 	'Episode: <a href="'.mainURL().'/?id='.$getsong[0]['episodeid'].'">'.$getsong[0]['episodeid'].'</a><br><br><br>'.
 	'IP: <a href="http://www.ip2location.com/'.$ip.'">'.$ip.'</a><br>'.
-	//'<a href="'.mainURL().'/?action=savefield&itemid='.$_GET['itemid'].'&data='.rawurlencode($_GET['data']).'&field='.$_GET['field'].'">ADD '.$item.'</a><br><br>'.
-	'<a href="'.mainURL().'/?action=savefield&itemid='.$_GET['itemid'].'&data='.rawurlencode('add scene description').'&field='.$_GET['field'].'">DELETE </a><br><br>';
+	//'<a href="'.mainURL().'/?action=savefield&itemid='.$params['itemid'].'&data='.rawurlencode($params['data']).'&field='.$params['field'].'">ADD '.$item.'</a><br><br>'.
+	'<a href="'.mainURL().'/?action=savefield&itemid='.$params['itemid'].'&data='.rawurlencode('add scene description').'&field='.$params['field'].'">DELETE </a><br><br>';
 
 	if(isset($_SESSION['user']['username']))$email=$_SESSION['user']['username'];
 	else $email=contactemail();
@@ -522,10 +522,10 @@ function emailitem($_GET,$item){
 	else
 		return false;
 }
-function emailshow($_GET){
+function emailshow($params){
 	$ip = getIP();
-	$body='Add show: '.$_GET['showname'].' <br>
-	ADD: <a href="'.mainURL().'/?showname='.$_GET['showname'].'">ADD SHOW</a><br><br>'.
+	$body='Add show: '.$params['showname'].' <br>
+	ADD: <a href="'.mainURL().'/?showname='.$params['showname'].'">ADD SHOW</a><br><br>'.
 	'IP: <a href="http://www.ip2location.com/'.$ip.'">'.$ip.'</a>';
 
 	if(isset($_SESSION['user']['username']))$email=$_SESSION['user']['username'];
@@ -539,10 +539,10 @@ function emailshow($_GET){
 	else
 		return false;
 }
-function emailmovie($_GET){
+function emailmovie($params){
 	$ip = getIP();
-	$body='Add movie: '.$_GET['moviename'].' <br>
-	ADD: <a href="'.mainURL().'/?action=addmovie&moviename='.$_GET['moviename'].'">ADD MOVIE</a><br><br>'.
+	$body='Add movie: '.$params['moviename'].' <br>
+	ADD: <a href="'.mainURL().'/?action=addmovie&moviename='.$params['moviename'].'">ADD MOVIE</a><br><br>'.
 	'IP: <a href="http://www.ip2location.com/'.$ip.'">'.$ip.'</a>';
 
 	if(isset($_SESSION['user']['username']))$email=$_SESSION['user']['username'];
@@ -586,90 +586,90 @@ function saveSub($showid,$checked='',$eid=null){
 }
 function updateSub($showid,$set,$eid=null){
 	if(!$eid)$eid=$_SESSION['user']['eid'];
-	db_connect();
+	$link = db_connect();
 	$query = sprintf("update subs set $set where showid='%s' and eid='%s'",
-	mysql_real_escape_string($showid),
-	mysql_real_escape_string($eid)
+	mysqli_real_escape_string($link,$showid),
+	mysqli_real_escape_string($link,$eid)
 	);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 function insertSub($showid){
-	db_connect();
+	$link = db_connect();
 	$query = sprintf("insert into subs set showid='%s', eid='%s'",
-	mysql_real_escape_string($showid),
-	mysql_real_escape_string($_SESSION['user']['eid'])
+	mysqli_real_escape_string($link,$showid),
+	mysqli_real_escape_string($link,$_SESSION['user']['eid'])
 	);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return $result;
 }
-function saveShow($_POST){
-	db_connect();
+function saveShow($params){
+	$link = db_connect();
 	$query = sprintf("insert into shows set showname='%s', imdb='%s', thetvdb='%s', shownamevariation='%s'",
-	mysql_real_escape_string($_POST['showname']),
-	mysql_real_escape_string($_POST['imdb']),
-	mysql_real_escape_string($_POST['thetvdb']),
-	mysql_real_escape_string($_POST['altshowname'])
+	mysqli_real_escape_string($link,$params['showname']),
+	mysqli_real_escape_string($link,$params['imdb']),
+	mysqli_real_escape_string($link,$params['thetvdb']),
+	mysqli_real_escape_string($link,$params['altshowname'])
 	);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 function getShows(){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `shows` order by `showname` limit 100";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 
 function getShowID($name,$all=0){
-	db_connect();
-	$query = "select * from `shows` where `showname` like '%".mysql_real_escape_string($name)."%' ";
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = "select * from `shows` where `showname` like '%".mysqli_real_escape_string($link,$name)."%' ";
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	if($all)return $results;
 	else return $results[0];
 }
 function getShow($id){
-	db_connect();
-	$query = "select * from shows where showid='".mysql_real_escape_string($id)."'";
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = "select * from shows where showid='".mysqli_real_escape_string($link,$id)."'";
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return @$results[0];
 }
 function getShowName($id){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from shows where showid=$id";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results[0]['showname'];
 }
 function removeposted(){
-	db_connect();
+	$link = db_connect();
 	$query = "delete from `episodes` where `posted`='1'";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function deleteepisode($episodeid){
-	db_connect();
+	$link = db_connect();
 	$query = "delete from `episodes` where `episodeid`='$episodeid'";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getTodayEpisodes($date){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `episodes` where `date`='$date' and `posted`='0'";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getLastPosts($lastpart='order by `timestamp` desc,`views` desc limit 0,150'){
 	$today=time();
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `episodes` where `timestamp`<='$today' and `season`!='0' $lastpart"; //order by `dateadded`
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
@@ -677,9 +677,9 @@ function getEpisodes2($id,$limit=0,$episode=0,$season=0){
 	if($episode||$season)$add.=" and `season`='$season' and `episode`='$episode'";
 	if(!$limit)$add.="order by `timestamp`,`episode` ";
 	
-	db_connect();
-	$query = "select * from `episodes` where `showid`='".mysql_real_escape_string($id)."' $add";
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = "select * from `episodes` where `showid`='".mysqli_real_escape_string($link,$id)."' $add";
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	if($episode||$season)return $results[0];
 	else return $results;
@@ -689,9 +689,9 @@ function getEpisodes($id,$limit=0,$episode=0,$season=0){
 	if($episode||$season)$add.=" and `season`='$season' and `episode`='$episode'";
 	if(!$limit)$add.="order by `timestamp`,`episode` ";
 	
-	db_connect();
-	$query = "select * from `episodes` where `showid`='".mysql_real_escape_string($id)."' $add";
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = "select * from `episodes` where `showid`='".mysqli_real_escape_string($link,$id)."' $add";
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	if($episode||$season)return $results[0]['episodeid'];
 	else return $results;
@@ -701,94 +701,97 @@ function getEpisodes3($id,$limit=0,$episode=0,$season=0){
 	if(isset($episode)||isset($season))$add.=" and `season`='$season' and `episode`='$episode'";
 	if(!isset($limit))$add.="order by `timestamp`,`episode` ";
 	
-	db_connect();
-	$query = "select * from `episodes` where `showid`='".mysql_real_escape_string($id)."' $add";
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = "select * from `episodes` where `showid`='".mysqli_real_escape_string($link,$id)."' $add";
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getEpisodes4($where=null){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `episodes` $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getMovies($where="`season`='0' order by `title`"){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `episodes` where $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function countSongs($id){
-	if($id)$where="and episodeid=".mysql_real_escape_string($id);
-	db_connect();
+	$link = db_connect();
+	if($id)$where="and episodeid=".mysqli_real_escape_string($link,$id);
 	$query = "select count(*) from `songs` where `deleted`=0 and `theme`=0 $where";
-	$result = mysql_query($query);
-	$results = mysql_fetch_array($result);
+	$result = mysqli_query($link,$query);
+	$results = mysqli_fetch_array($result);
 	return $results[0];
 }
 function getSongs($id){
-	if($id)$where="and episodeid=".mysql_real_escape_string($id);
-	db_connect();
-	//$query = "select * from `songs`,`links` where `songs`.`deleted`=0 and `songs`.`theme`=0 $where and `songs`.`songid`=`links`.`songid` order by `links`.`clickcount` desc";
+	$link = db_connect();
+	if($id)$where="and episodeid=".mysqli_real_escape_string($link,$id);
+	
 	$query = "select * from `songs` where `deleted`=0 and `theme`=0 $where order by ord";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getSub($where=""){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `subs` $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getSong($id){
-	if($id)$where="and songid=".mysql_real_escape_string($id);
-	db_connect();
+	$link = db_connect();
+	if($id)$where="and `songid`=".mysqli_real_escape_string($link,$id);
 	$query = "select * from `songs` where `deleted`=0 $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getSong2($where=null){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `songs` $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getMissingLinks(){
-	db_connect();
+	$link = db_connect();
 	$query = "select * from `songs` where `deleted`=0 and not exists (select 1 from `links` where `songs`.`songid`=`links`.`songid`)";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getLink($id){
-	if($id)$where="where `linkid`=".mysql_real_escape_string($id);
-	db_connect();
+	$link = db_connect();
+	if($id)$where="where `linkid`=".mysqli_real_escape_string($link,$id);
+	
 	$query = "select * from `links` $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results[0];
 }
 function getLinks($id=0,$popular=0){
-	if($id)$where="where `songid`=".mysql_real_escape_string($id)." and `deleted` = 0 ";
+	$link = db_connect();
+	
+	if($id)$where="where `songid`=".mysqli_real_escape_string($link,$id)." and `deleted` = 0 ";
 	if($popular)$where = "where `clickcount`!=0 order by `clickcount` desc limit 50";
-	db_connect();
+	
 	$query = "select * from `links` $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
 function getEpisode($id){
-	if($id)$where="where episodeid=".mysql_real_escape_string($id);
-	db_connect();
+	$link = db_connect();
+	if($id)$where="where episodeid=".mysqli_real_escape_string($link,$id);
 	$query = "select * from episodes $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	if($id){
 		if($results)return $results[0];
@@ -845,23 +848,23 @@ function updateShowEpisodes($getShow){
 }
 
 function updateEpisode($id=null,$field,$value,$idtype="episodeid"){
-	if($id)$add="where `".$idtype."`=".mysql_real_escape_string($id);
-	db_connect();
-	$query = "update `episodes` set `$field`='".mysql_real_escape_string($value)."' $add";
-	$result = mysql_query($query);
+	$link = db_connect();
+	if($id)$add="where `".$idtype."`=".mysqli_real_escape_string($link,$id);
+	$query = "update `episodes` set `$field`='".mysqli_real_escape_string($link,$value)."' $add";
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 function updateEpisode2($id=null,$field,$value=0){
-	if($id)$add="where showid=".mysql_real_escape_string($id);
-	db_connect();
-	$query = "update `episodes` set `$field`='".mysql_real_escape_string($value)."' $add";
-	$result = mysql_query($query);
+	$link = db_connect();
+	if($id)$add="where showid=".mysqli_real_escape_string($link,$id);
+	$query = "update `episodes` set `$field`='".mysqli_real_escape_string($link,$value)."' $add";
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 function updateShow($id,$field,$value){
-	db_connect();
-	$query = "update `shows` set `$field`='".mysql_real_escape_string($value)."' where `showid`=".mysql_real_escape_string($id);
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = "update `shows` set `$field`='".mysqli_real_escape_string($link,$value)."' where `showid`=".mysqli_real_escape_string($link,$id);
+	$result = mysqli_query($link,$query);
 	return $result;
 }
 
@@ -910,25 +913,25 @@ function check_input($string)   {
 }
 
 function updateuser($username) {
-	db_connect();
-	$query = "update employee set `verfied` = '0' where username = '". mysql_real_escape_string($username)."'";
-	$result = mysql_query($query);		
+	$link = db_connect();
+	$query = "update employee set `verfied` = '0' where username = '". mysqli_real_escape_string($link,$username)."'";
+	$result = mysqli_query($link,$query);		
 	return $result;
 }
 function userInfo($username) {
-	db_connect();
-	$query = sprintf("select * from employee where username = '%s' and onleave = 0",  mysql_real_escape_string($username));
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = sprintf("select * from employee where username = '%s' and onleave = 0",  mysqli_real_escape_string($link,$username));
+	$result = mysqli_query($link,$query);
 	//Test to see if there is no row
 	$number_of_row = @mysql_num_rows($result);
 	if ($number_of_row == 0)$userInfo = null;
-	$userInfo = mysql_fetch_array($result);			
+	$userInfo = mysqli_fetch_array($result);			
 	return $userInfo;
 }
 function users($where="") {
-	db_connect();
+	$link = db_connect();
 	$query = "select * from employee $where";
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
@@ -939,9 +942,9 @@ function decode5t($str){
 	return $str;
 }
 function userID($eid) {
-	db_connect();
-	$query = sprintf("select * from employee where `eid` = '%s' and onleave = 0",  mysql_real_escape_string($eid));
-	$result = mysql_query($query);
+	$link = db_connect();
+	$query = sprintf("select * from employee where `eid` = '%s' and onleave = 0",  mysqli_real_escape_string($link,$eid));
+	$result = mysqli_query($link,$query);
 	$results = db_result($result);
 	return $results;
 }
@@ -956,14 +959,14 @@ function parse_array()   {
 	return $params;
 }
 function insert_user($params) {
-	db_connect();   
+	$link = db_connect();   
 	$query = sprintf("insert into employee set username = '%s', password = '%s', department = '%s',	`verify` = '%s', `verfied` = '1', created_at = NOW()",
-		mysql_real_escape_string($params['email']),
-		mysql_real_escape_string(encode5t($params['password'])),
-		mysql_real_escape_string('users'),
-		mysql_real_escape_string($params['verify'])
+		mysqli_real_escape_string($link,$params['email']),
+		mysqli_real_escape_string($link,encode5t($params['password'])),
+		mysqli_real_escape_string($link,'users'),
+		mysqli_real_escape_string($link,$params['verify'])
 		);
-	$result = mysql_query($query);
+	$result = mysqli_query($link,$query);
 	return mysql_insert_id();
 }
 

@@ -1,42 +1,18 @@
-<br><br>
-
-Started in <a href="http://lyrics.showmusic.ml/2008/11/all-music-lyrics.html">2008</a> as a blog for lyrics, we then added song names and links to intro and credit music in popular TV shows and movies.<br>
-Since then we developed this site to automate the pages for episodes and ability to add songs by anyone.
-<br><br>
-
-<a href="?p=signup">Sign up</a> to subscribe to your favorite shows and receive emails when it is posted with songs..<br><br>
-
 <?php
-echo 'Our database has <b>';
-echo number_format(select_table($table='episodes',$fields=null,$where=null,$display=null,$countonly=1));
-echo '</b> episodes from <b>';
-echo number_format(select_table($table='shows',$fields=null,$where=null,$display=null,$countonly=1));
-echo '</b> shows, containing <b>';
-echo number_format(select_table($table='songs',$fields=null,$where=null,$display=null,$countonly=1)); 
-echo '</b> songs.<br>'; 
-echo 'To date we had <b>';
-echo number_format(select_table($table='episodes',$fields=null,$where=null,$display=null,null,'views')); 
-echo '</b> total page views on episode pages, and <b>';
-echo number_format(select_table($table='songs',$fields=null,$where=null,$display=null,null,'clickcount'));
-echo '</b> total clicks on song links.<br>';
-?>
 
-<br>
-Also feel free to take a look at the <a href="?p=popularshows">popular shows</a> and <a href="?p=popularlinks">popular song links</a>.<br><br>
+echo '<br><br>';
+//echo '<h3>I have turned off the advertising on this website. <br>';
+//echo 'This website domain will <a href="http://who.is/whois/allmusiclyrics.info" target="_blank">expire</a> and I am unable to renew because the costs are high and no money is being donated nor earned through advertising. </h3>';
+// It costs $15, the advertising payout is now under this, if you like this website and want it to stay live please contribute what you can - I only need 15 people to donate 1 dollar, it will be enough!<br>';
+// echo '<center><iframe width="263" height="135" src="https://www.onlinecountdowns.com/w/182069" frameborder="0"></iframe></center>';
 
-<?php 
+echo '<br><br>';
+echo <<<HTML
+Thank you to those that donate to keep us going.
 
-if($_SESSION['user']['department']=='admins'){
-	echo 'ADMIN: ';
-	echo ' <a href="?p=hourlyupdate" target="_blank">HourlyUpdate</a> ';
-	echo '<br><br>';
-}
-?>
+<br><br>
 
-The code is open source for anyone to view/edit/modify, if you would like to contribute you can find the latest code on <a href="https://github.com/allmusiclyrics/allmusiclyrics" target="_blank">github</a>.<br><br>
-
-The web development, hosting and updating of the content is supported by users like you and our ad network: <a href="http://adf.ly/?id=1559170">adf.ly</a> and <br> <a href="?p=donate">donations</a> using Bitcoin: <a href="bitcoin:<?php echo $btc;?>"><?php echo $btc; ?></a>. <!-- or paypal:
-
+Bitcoin: <a href="bitcoin:$btc?amount=0.1">$btc</a>. or paypal: <br>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <div style="text-align: center;">
 <input name="cmd" type="hidden" value="_s-xclick" />
@@ -44,22 +20,17 @@ The web development, hosting and updating of the content is supported by users l
 " />
 <input alt="PayPal - The safer, easier way to pay online!" border="0" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" type="image" /><img alt="" border="0" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" />
 </div>
-</form>
--->
-Thank you.
+</form><br>
+HTML;
+
+/*
+<br>
+If you would like to turn your future adversting off, <a href="?p=contact">email us</a> with the email you used to sign in and we will mark your account to never see ads again! -- this is including the adf.ly redirect - you will go right to youtube, every time.<br>
+<br>
+Thank you!
 <br><br>
+*/ 
 
-Like us on facebook: 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
-<div class="fb-like-box" data-href="http://www.facebook.com/Allmusiclyrics" data-width="292" data-show-faces="false" data-stream="false" data-header="true"></div>
-
-<br><br>
+//<img src="https://blockchain.info/qr?data='.$btc.'&size=200"/>
 

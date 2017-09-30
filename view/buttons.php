@@ -17,22 +17,21 @@ if(isset($_SESSION['user'])){
 
 
 if(isset($_SESSION['user'])){
-	$user =explode('@',$_SESSION['user']['username']);
-	echo '&nbsp;&nbsp;&nbsp;&nbsp; <b>'.$user[0].'  </b> ';// &nbsp;&nbsp;&nbsp; <a href="?p=logout">Logout</a><br>';
+	$user = explode('@',$_SESSION['user']['username']);
+	$email = $_SESSION['user']['username'];
+	$default = '';
+	$size = 30;
+	$grav_url = "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?d=" . urlencode( $default ) . "&s=" . $size;
+	echo ' - ';
 	
-	/* if($_SESSION['user']['songsadded']==0||date('m/d/Y',$_SESSION['user']['lastactive'])!=date('m/d/Y')){
-		$getSong2=getSong2("where `eid`='".$_SESSION['user']['eid']."' and `deleted`=0");
-		$n=0;
-		foreach($getSong2 as $t)$n++;
-		updateTable('employee',array('songsadded'=>$n,'lastactive'=>time()),'where `eid`='.$_SESSION['user']['eid']);
-		$_SESSION['user'] = userInfo($_COOKIE['username']);		
-	}else
-		$n = $_SESSION['user']['songsadded'];
-	
-	if($n==0)echo 'You have not added any songs yet.';
-	else echo 'You have added '.$n.' songs so far.'; */
+	if($grav_url){
+		echo '<img src="'.$grav_url.'>" alt="'.$user[0].'" title="'.$user[0].'" />';
+	}else{
+		echo '<b>'.$user[0].'  </b> ';
+	}
 }
 
-echo '<span style="float: right;">';
+echo ' <span style="float: right;">';
+
 include(ROOTPATH.'/view/search.php');
 echo '</span>';

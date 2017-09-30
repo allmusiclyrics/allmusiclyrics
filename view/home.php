@@ -1,23 +1,18 @@
 <?php
 
+if(!isset($getLastPosts))$getLastPosts=getLastPosts();
 if($getLastPosts){
 	foreach($getLastPosts as $getEpisode){
 		if($getEpisode['date']==date('m/d/Y')){
 			$getShow=getShow($getEpisode['showid']);
-			// if($_SESSION['user']['department']=='admins'){
-			// if($getShow['updated']!=date('m/d/Y')){
-				// if($getShow['thetvdb']!=0)
-					// updateShowEpisodes($getShow);
-			// }
 			if(!isset($today))
 				echo '<br><br>Today '.date('l F j, Y').':<br>';
 			
 			$today=1;
 			
-			include('list.php');
+			include($addinclude.'list.php');
 		}
 	}
-	//$getShow=null;
 	foreach($getLastPosts as $getEpisode){
 		if($getEpisode['date']==date('m/d/Y',strtotime('yesterday'))){
 			if(!isset($yesterday))
@@ -25,7 +20,7 @@ if($getLastPosts){
 			
 			$yesterday=1;
 			
-			include('list.php');
+			include($addinclude.'list.php');
 			
 		}
 	}
@@ -39,7 +34,7 @@ if($getLastPosts){
 				
 				$day[$i]=1;
 				
-				include('list.php');
+				include($addinclude.'list.php');
 			}
 		}
 	}
