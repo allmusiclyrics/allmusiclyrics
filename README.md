@@ -1,4 +1,4 @@
-allmusiclyrics.info website uses:
+website uses:
 ==============
 http://lessframework.com design
 
